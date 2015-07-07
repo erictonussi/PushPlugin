@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.R.drawable;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
@@ -63,6 +64,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		Bundle extras = intent.getExtras();
 		if (extras != null)
 		{
+			
 			// if we are in the foreground, just surface the payload, else post it to the statusbar
             if (PushPlugin.isInForeground()) {
 				extras.putBoolean("foreground", true);
@@ -106,7 +108,31 @@ public class GCMIntentService extends GCMBaseIntentService {
 				.setContentTitle(extras.getString("title"))
 				.setTicker(extras.getString("title"))
 				.setContentIntent(contentIntent)
+				// .addAction(drawable.stat_sys_download_done, "Confirmar", contentIntent)
+				// .addAction(drawable.ic_menu_close_clear_cancel, "Cancelar", contentIntent)
 				.setAutoCancel(true);
+
+		/*Intent intent = new Intent(this, PushHandlerActivity.class);
+	    // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		// intent.setAction("PAUSE");
+		// intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// intent.putExtra("pushBundle", extras);
+		
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		mBuilder.addAction(drawable.ic_media_pause, "PAUSE", pendingIntent);*/
+
+		// Intent intent = new Intent(this, NotificationActivity.class);
+	 //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+	 //    intent.putExtra("NOTIFICATION_ID", 5 );
+	 //    PendingIntent dismissIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+	 //    mBuilder.addAction(drawable.ic_media_pause, "PAUSE", dismissIntent);
+
+		String galo = extras.getString("galo");
+		if ( galo != null && galo.length() != 0) {
+			mBuilder.addAction(drawable.stat_sys_download_done, "Confirmar", contentIntent);
+			mBuilder.addAction(drawable.ic_menu_close_clear_cancel, "Cancelar", contentIntent);
+		}
 
 		String message = extras.getString("message");
 		if (message != null) {
