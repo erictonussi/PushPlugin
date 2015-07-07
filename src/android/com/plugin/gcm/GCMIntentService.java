@@ -130,8 +130,27 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		String galo = extras.getString("galo");
 		if ( galo != null && galo.length() != 0) {
-			mBuilder.addAction(drawable.stat_sys_download_done, "Confirmar", contentIntent);
-			mBuilder.addAction(drawable.ic_menu_close_clear_cancel, "Cancelar", contentIntent);
+
+			Intent cancelIntent = new Intent( this, PushHandlerActivity.class);
+			cancelIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			// cancelIntent.putExtra("pushBundle", extras);
+			cancelIntent.setAction("remove");
+
+			PendingIntent pendingCancelIntent = PendingIntent.getActivity(this, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+			// mBuilder.addAction(drawable.stat_sys_download_done, "Confirmar", contentIntent);
+			mBuilder.addAction(drawable.ic_menu_close_clear_cancel, "Cancelar", pendingCancelIntent);
+			
+
+			Intent confirmIntent = new Intent( this, PushHandlerActivity.class);
+			// confirmIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			// confirmIntent.putExtra("pushBundle", extras);
+			confirmIntent.setAction("confirm");
+
+			PendingIntent pendingConfirmIntent = PendingIntent.getActivity(this, 0, confirmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+			mBuilder.addAction(drawable.stat_sys_download_done, "Confirmar", pendingConfirmIntent);
+
 		}
 
 		String message = extras.getString("message");

@@ -40,9 +40,31 @@ public class PushHandlerActivity extends Activity
 	 */
 	private void processPushBundle(boolean isPushPluginActive)
 	{
+		Log.v(TAG, "processPushBundle");
+		// Log.v(TAG, "-----");
+		// Log.v(TAG,getIntent().getAction());
+		// Log.v(TAG, "-----");
+
+		String action = getIntent().getAction();
+
+		if (action != null)	{
+
+			if ( action.compareTo("remove") == 0 ) {
+
+				Log.v(TAG, "removeAll");
+
+				final NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+			    notificationManager.cancelAll();
+
+			    return;
+			}
+
+		} 
+
 		Bundle extras = getIntent().getExtras();
 
 		if (extras != null)	{
+
 			Bundle originalExtras = extras.getBundle("pushBundle");
             
             originalExtras.putBoolean("foreground", false);
@@ -57,6 +79,19 @@ public class PushHandlerActivity extends Activity
 	 */
 	private void forceMainActivityReload()
 	{
+		Log.v(TAG, "forceMainActivityReload");
+
+		String action = getIntent().getAction();
+
+		if (action != null)	{
+
+			if ( action.compareTo("remove") == 0 ) {
+
+			    return;
+			}
+
+		} 
+
 		PackageManager pm = getPackageManager();
 		Intent launchIntent = pm.getLaunchIntentForPackage(getApplicationContext().getPackageName());    		
 		startActivity(launchIntent);
@@ -64,6 +99,7 @@ public class PushHandlerActivity extends Activity
 
   @Override
   protected void onResume() {
+	Log.v(TAG, "onResume");
     super.onResume();
     final NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
     notificationManager.cancelAll();
